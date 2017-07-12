@@ -3,7 +3,7 @@ import unittest
 import codecs
 import os
 
-from workers.basic_worker import BasicUserParseWorker
+from workers.basic_worker import BasicUserParseWorker, WorkerException
 
 
 class TestWorkerBasic(unittest.TestCase):
@@ -50,7 +50,41 @@ class TestWorkerBasic(unittest.TestCase):
 
         self.assertEqual(len_to_crawl_after, len_to_crawl_before)
 
+
+        """
+        This unit test was partially implemented in class but was broken
+        It is now fixed
+        """
     def test_worker_add_links_in_crawled(self):
+        worker = BasicUserParseWorker("https://www.reddit.com/user/Chrikelnel")
+        worker.crawled = []
+
+        len_to_crawl_before = len(worker.to_crawl)
+        worker.add_links(["https://www.reddit.com/user/GallowBoob"])
+        len_to_crawl_after = len(worker.to_crawl)
+
+        self.assertEqual(len_to_crawl_after, len_to_crawl_before)
+
+        """
+        New Unit tests added below
+        """
+    def test_worker_throws_exception_on_invalid_url(self):
+        worker = BasicUserParseWorker('BAD_URL')
+        self.assertRaises(WorkerException, worker.run)
+
+    def test_worker_cannot_add_duplicate_links(self):
+        worker = BasicUserParseWorker("https://www.reddit.com/user/Chrikelnel")
+        worker.crawled = []
+
+        len_to_crawl_before = len(worker.to_crawl)
+        worker.add_links([
+            "https://www.reddit.com/user/GallowBoob",
+            "https://www.reddit.com/user/GallowBoob"])
+        len_to_crawl_after = len(worker.to_crawl)
+
+        self.assertEqual(len_to_crawl_after, len_to_crawl_before+1)
+
+    def test_worked_cannot_add_already_crawled_links(self):
         worker = BasicUserParseWorker("https://www.reddit.com/user/Chrikelnel")
         worker.crawled = []
 
@@ -59,11 +93,6 @@ class TestWorkerBasic(unittest.TestCase):
         len_to_crawl_after = len(worker.to_crawl)
 
         self.assertEqual(len_to_crawl_after, len_to_crawl_before+1)
-
-
-
-
-
 
 
 
