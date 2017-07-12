@@ -50,12 +50,16 @@ class TestWorkerBasic(unittest.TestCase):
 
         self.assertEqual(len_to_crawl_after, len_to_crawl_before)
 
-
         """
+        New Unit tests added below
+        """
+    def test_worker_add_links_in_crawled(self):
+        """
+        calling add_links() with one link on a worker increases the to_crawl length by 1
+
         This unit test was partially implemented in class but was broken
         It is now fixed
         """
-    def test_worker_add_links_in_crawled(self):
         worker = BasicUserParseWorker("https://www.reddit.com/user/Chrikelnel")
         worker.crawled = []
 
@@ -65,14 +69,10 @@ class TestWorkerBasic(unittest.TestCase):
 
         self.assertEqual(len_to_crawl_after, len_to_crawl_before+1)
 
-        """
-        New Unit tests added below
-        """
-    def test_worker_throws_exception_on_invalid_url(self):
-        worker = BasicUserParseWorker('https://www.reddit.com/user/')
-        self.assertRaises(IndexError, worker.run)
-
     def test_worker_cannot_add_duplicate_links(self):
+        """
+        calling add_links() with two identical links only adds 1 link
+        """
         worker = BasicUserParseWorker("https://www.reddit.com/user/Chrikelnel")
         worker.crawled = []
 
@@ -85,6 +85,9 @@ class TestWorkerBasic(unittest.TestCase):
         self.assertEqual(len_to_crawl_after, len_to_crawl_before+1)
 
     def test_worked_cannot_add_already_crawled_links(self):
+        """
+        adding a link that has already been crawled does not change the to_crawl length
+        """
         worker = BasicUserParseWorker("https://www.reddit.com/user/Chrikelnel")
         worker.crawled = []
 
