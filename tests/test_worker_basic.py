@@ -70,7 +70,7 @@ class TestWorkerBasic(unittest.TestCase):
         """
     def test_worker_throws_exception_on_invalid_url(self):
         worker = BasicUserParseWorker('https://www.reddit.com/user/')
-        self.assertRaises(WorkerException, worker.run)
+        self.assertRaises(IndexError, worker.run)
 
     def test_worker_cannot_add_duplicate_links(self):
         worker = BasicUserParseWorker("https://www.reddit.com/user/Chrikelnel")
