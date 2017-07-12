@@ -63,13 +63,13 @@ class TestWorkerBasic(unittest.TestCase):
         worker.add_links(["https://www.reddit.com/user/GallowBoob"])
         len_to_crawl_after = len(worker.to_crawl)
 
-        self.assertEqual(len_to_crawl_after, len_to_crawl_before)
+        self.assertEqual(len_to_crawl_after, len_to_crawl_before+1)
 
         """
         New Unit tests added below
         """
     def test_worker_throws_exception_on_invalid_url(self):
-        worker = BasicUserParseWorker('BAD_URL')
+        worker = BasicUserParseWorker('https://www.reddit.com/user/')
         self.assertRaises(WorkerException, worker.run)
 
     def test_worker_cannot_add_duplicate_links(self):
